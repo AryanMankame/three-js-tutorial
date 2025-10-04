@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Float, Html, OrbitControls } from '@react-three/drei';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { Float, OrbitControls } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { div, PI } from 'three/tsl';
+// import { div, PI } from 'three/tsl';
 import { pageNo } from './App';
-import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
+import { degToRad } from 'three/src/math/MathUtils.js';
 import { useAtom } from 'jotai';
 const pagesPosition : Array<any> = [];
 const Page = ({pageHeight,pageWidth,pageDepth,widthSegments,heightSegments,key_val,z_position,pageInfo,pageDistance,isFrontcover,isBackcover,...props} : any) => {
-    const [pageNumber,setPageNumber] = useAtom(pageNo);
+    const [pageNumber] = useAtom(pageNo);
     useEffect(() => {
         for(let i=0;i<pagesPosition.length;i++) {
             if(i <= pageNumber) {
@@ -18,7 +18,7 @@ const Page = ({pageHeight,pageWidth,pageDepth,widthSegments,heightSegments,key_v
         }
     },[pageNo])
     const pageGeometry = new THREE.BoxGeometry(pageWidth,pageHeight,pageDepth,widthSegments,heightSegments,2);
-    const [targetRotation,setrotation] = useState(0);
+    const [targetRotation] = useState(0);
     console.log("->",targetRotation)
     console.log("pageInfo => ",pageInfo.front,pageInfo.back)
     // const segmentWidth = pageWidth / pageSegments;
@@ -104,9 +104,9 @@ const Page = ({pageHeight,pageWidth,pageDepth,widthSegments,heightSegments,key_v
     skinnedMesh.receiveShadow = true;
     skinnedMesh.frustumCulled = false;
     const skinnedMeshRef = React.useRef<THREE.SkinnedMesh>(null);
-    const skeletonHelperRef = React.useRef<THREE.SkeletonHelper | null>(null);
+    // const skeletonHelperRef = React.useRef<THREE.SkeletonHelper | null>(null);
     const pivotRef = React.useRef<THREE.Group>(null);
-    useFrame((_,delta) => {
+    useFrame((_) => {
         // console.log(delta)
         // if (pivotRef.current) {
         //     // console.log(pagePosition," => ",pivotRef.current.rotation.y)
@@ -191,8 +191,6 @@ function BookComponent() {
     const pageGeometry = new THREE.BoxGeometry(5,10,0.3,30,2);
     const position = pageGeometry.attributes.position;
     const vector = new THREE.Vector3();
-    const skinIndexes = [];
-    const skinWeights = [];
     const x = [];
     console.log(position)
     for(let i=0; i<position.count; i++) {
